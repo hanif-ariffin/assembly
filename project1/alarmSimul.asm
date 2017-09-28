@@ -1,5 +1,3 @@
-a
-
 ;------------------------------------------------------
 ; Alarm Simulation Assembler Program
 ; File: alarmSimul.asm (Alarm System Simulation Module)
