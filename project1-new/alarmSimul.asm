@@ -1,3 +1,4 @@
+
 ;------------------------------------------------------
 ; Alarm Simulation Assembler Program
 ; File: alarmSimul.asm (Alarm System Simulation Module)
@@ -33,12 +34,12 @@ writeEEByte    equ   $EEA6
         lds #STACK       ; Not reflected in C
         bsr inithw       ; initiliase the hardware
         ; byte select - in register B
-            ;do
-mainloop:           ; {
+   			;do
+mainloop:  			; {
         ldd #MENU          ;   printf(MENU);
         jsr [printf,PCr] 
         jsr [getchar,PCr]  ;   select = getchar();  // getchar is debug 12 routine
-    pshb ; save b
+	pshb ; save b
         pulb
         cmpb #'c'          ;   if(select == 'c') configCodes();
         bne mnElseif
@@ -126,10 +127,10 @@ NEWLINE  dc.b   NL,CR,$00
 ;----------
 ; Include other modules here
 ;-----------
- INCLUDE    config.asm
- INCLUDE    armed.asm
- INCLUDE    delay.asm
- INCLUDE    utilities.asm
+ INCLUDE	config.asm
+ INCLUDE	armed.asm
+ INCLUDE	delay.asm
+ INCLUDE	utilities.asm
 
    switch code_section
 ENDCODE ;  used to define where the dataEEPROM section starts

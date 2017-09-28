@@ -20,9 +20,9 @@
 ;------------------------------------------------------
 setDelay: 
 
-	; Complete this subroutine
-	STD delayCount ;Put the value in D into globalVar::delayCount
-	rts ;Branch back out
+   ; Complete this subroutine
+   STD delayCount
+   rts
 
 
 ;------------------------------------------------------
@@ -52,41 +52,27 @@ PDLY_PR_X   DS.W 1 ; preserve X
 PDLY_PR_B   DS.B 1 ; preserve B
 PDLY_RA     DS.W 1 ; return address
 
-;------NOTE---------
-; polldelay begins by storing the values from b,x,y to the stack.
-; then perform a set of instructions that will take x seconds of processing time
-; then pull back the values of b,x,y from the stack.
-;-------------------
 polldelay: pshb
    pshx
    pshy
 
-   ; Complete this routine
-   ;Obtain the delayCount value set from setDelay and put it into register X
-   LDX delayCount
 
-
+	; Complete this routine
 loop_delay_count:
-   XGDX ; Switch X <-> D, D will now contain the delayCount
-   LDX #3000
-loop_1_ms:
    NOP
    NOP
    NOP
    NOP
-   DEX ; Decrement #3000
-   BNE loop_1_count ; Loop to loop_1_ms if not equal to zero
-   XGDX ; Switch D <-> X, X will now contain the delayCount
-   DEX ; Decrement delayCount
-   BNE loop_delay_count ; Loop to loop_delay_count if not equal to zero
+   DEX
+   BNE loop_delay_count
+
+
 
    ; restore registers and stack
    puly
    pulx
    pulb
    rts
-
-
 
 
 
