@@ -66,19 +66,10 @@ polldelay: pshb
    LDX delayCount ;Obtain the delayCount value set from setDelay and put it into register X
 
 loop_delay_count:
-   ;----------------------------------
-   ; We swap the content in X (contains delayCount --> contains whatever) and D (contains whatever --> contains delayCount)
-   ;----------------------------------
-
-   XGDX ; Switch X <-> D
-   LDX #3000 ; Load a static value 3000 into register X. This is how many times the program will loop to be inactive for 1 ms.
-loop_1_ms:
-   DEX ; Decrement value in register X
-   BEQ loop_1_ms ; If the decrement instruction from before does not result in 0 value, then BNE( branch if not equal to 0) to loop_1_ms, which will decrement it again.
-   ;----------------------------------
-   ; We swap the content in X (contains 0 --> contains delayCount) and D (contains delayCount--> contains 0)
-   ;----------------------------------
-   XGDX ; Switch X <-> D
+   NOP
+   NOP
+   NOP
+   NOP
    DEX
    BNE loop_delay_count
 
