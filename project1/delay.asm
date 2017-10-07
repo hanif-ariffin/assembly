@@ -75,7 +75,7 @@ loop_1_ms:
    NOP
    NOP
    DEX ; Decrement #3000
-   BNE loop_1_count ; Loop to loop_1_ms if not equal to zero
+   BNE loop_1_ms ; Loop to loop_1_ms if not equal to zero
    XGDX ; Switch D <-> X, X will now contain the delayCount
    DEX ; Decrement delayCount
    BNE loop_delay_count ; Loop to loop_delay_count if not equal to zero

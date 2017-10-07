@@ -1,3 +1,0 @@
-	LDD #$3A
-	LDX $EE86
-	JSR 0,X
