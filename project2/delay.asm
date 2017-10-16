@@ -21,7 +21,7 @@
 setDelay: 
 
 	;-- Complete this subroutine
-	STD 	delayCount ;Put the value in D into globalVar::delayCount
+	STD       delayCount ;Put the value in D into globalVar::delayCount
 	rts
 
 
