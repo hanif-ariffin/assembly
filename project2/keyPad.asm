@@ -1,4 +1,4 @@
-z;----------------------------------------------------------------------
+;----------------------------------------------------------------------
 ; File: Keypad.asm
 ; Author:
 
@@ -40,34 +40,22 @@ POLLCOUNT	EQU		1		; Number of loops to create 1 ms poll time
 
  ; codes for scanning keyboard
 
-ROW1 EQU %11101111
-ROW2 EQU %11011111
-ROW3 EQU %10111111
-ROW4 EQU %01111111
-
-; defnitions for structure cnvTbl_struct
- OFFSET 0
-cnvTbl_code ds.b 1
-cnvTbl_ascii  ds.b 1
-cnvTbl_struct_len EQU *
-
-; Conversion Table
-cnvTbl  dc.b %11101110,'1'
-	dc.b %11101101,'2'
-	dc.b %11101011,'3'
-	dc.b %11100111,'a'
-	dc.b %11011110,'4'
-	dc.b %11011101,'5'
-	dc.b %11011011,'6'
-	dc.b %11010111,'b'
-	dc.b %10111110,'7'
-	dc.b %10111101,'8'
-	dc.b %10111011,'9'
-	dc.b %10110111,'c'
-	dc.b %01111110,'*'
-	dc.b %01111101,'0'
-	dc.b %01111011,'#'
-	dc.b %01110111,'d'
+KEY_1 EQU %11101110
+KEY_2 EQU %11101101
+KEY_3 EQU %11101011
+KEY_A EQU %11100111
+KEY_4 EQU %11011110
+KEY_5 EQU %11011101
+KEY_6 EQU %11011011
+KEY_B EQU %11010111
+KEY_7 EQU %10111110
+KEY_8 EQU %10111101
+KEY_9 EQU %10111011
+KEY_C EQU %10110111
+KEY_ASTERISK EQU %01111110
+KEY_0 EQU %01111101
+KEY_HASHTAG EQU %01111011
+KEY_D EQU %01110111
 
  SWITCH code_section  ; place in code section
 ;-----------------------------------------------------------	
@@ -79,8 +67,8 @@ cnvTbl  dc.b %11101110,'1'
 initKeyPad:
 	
 	;-- Set the DDRA and PUCR to enable input from the board
-	MOVB 	#$f0, 	DDRA ;-- readies porta to be read
-	MOVB 	#$01, 	PUCR ;-- clears any values in porta
+	MOVB 	#$FF, 	DDRA
+	MOVB 	#$01, 	PUCR
 	rts
 
 ;-----------------------------------------------------------    
@@ -169,7 +157,7 @@ pollReadkey_decrement_POLLCOUNT:
 ; Stack Usage
 	OFFSET 0  ; to setup offset into stack
 READKEY_CODE       DS.B 1 ; code variable
-READKEY_VARSIZE    DS.B 1 ; Preseserve A
+READKEY_VARSIZE:
 READKEY_RA         DS.W 1 ; return address
 
 ;-- push AC A because we are going to use it in this subroutine
@@ -182,8 +170,7 @@ readKey:psha
 ;-- see if anything changes (possibly under the same assumption that the keypress will keep overwriting the value in PORTA(??).
 ;-- 
 
-readkey_main
-
+readkey_main:
 	;-- Set PORTA to the default value of $0F
     MOVB 	$0F,				PORTA
 
@@ -241,7 +228,6 @@ readkey_check_release_key:
 
     ;-- Load the value that we obtained from keyPress and put it into AC B to be translated by the translate_keypad subroutine.
     LDAB 	READKEY_CODE,		SP
-    JSR 	translate_keypad
 
     ;-- Recover the stack memory that this subroutine uses.
     LEAS 	READKEY_VARSIZE,	SP
@@ -257,83 +243,124 @@ readkey_check_release_key:
 ; Description: Assume key is pressed. Set 0 on each output pin
 ;              to find row and hence code for the key.
 ;-----------------------------------------------------------	
-; Stack Usage: none
+;-- This subroutine does not use local variables so no stack is needed
 
-;-- keyPress is just a bunch of if's statement that will check each the given value obtained with the rows
+;-- keyPress is just a bunch of if's statement that will check each the given value obtained with the rows.
 keyPress:
 	
-	;-- Check if PORTA is ROW1
-	;-- If true jump straight to keyPress_found
-	movb 	#ROW1,	PORTA
-	ldab 	PORTA
-    cmpb 	#ROW1
-    bne 	keyPress_found
+	;-- Check if PORTA is KEY_0
+    cmpb 	#KEY_0
+    bne 	keyPress_found_key_0
 
-   	;-- Check if PORTA is ROW2.
-   	;-- If true jump straight to keyPress_found
-    movb 	#ROW2,	PORTA
-	ldab 	PORTA
-    cmpb 	#ROW2
-    bne 	keyPress_found
+   	;-- Check if PORTA is KEY_1
+    cmpb 	#KEY_1
+    bne 	keyPress_found_key_1
 
-   	;-- Check if PORTA is ROW3
-   	;-- If true jump straight to keyPress_found
-    movb 	#ROW3,	PORTA
-	ldab 	PORTA
-  	cmpb 	#ROW3
-    bne 	keyPress_found
+   	;-- Check if PORTA is KEY_2
+  	cmpb 	#KEY_2
+    bne 	keyPress_found_key_2
 
-    ;-- Else it has to be ROW4
-   	movb 	#ROW4,	PORTA
-keyPress_found:
-    LDAB 	PORTA
-    RTS	      
-;-----------------------------------------------------------	
-; Subroutine:  ch <- translate_keypad(code)
-; Arguments
-;	code - in Acc B - code read from keypad port
-; Returns
-;	ch - saved on stack but returned in Acc B - ASCII code
-; Local Variables
-;    	ptr - in register X - pointer to the table
-;	count - counter for loop in accumulator A
-; Description:
-;   translate the code by using the conversion table
-;   searching for the code.  If not found, then BADCODE
-;   is returned.
-;-----------------------------------------------------------	
-; Stack Usage:
-   OFFSET 0
-TR_CH DS.B 1  ; for ch 
-TR_PR_A DS.B 1 ; preserved regiters A
-TR_PR_X DS.B 1 ; preserved regiters X
-TR_RA DS.W 1 ; return address
+    ;-- Check if PORTA is KEY_3
+    cmpb 	#KEY_3
+    bne 	keyPress_found_key_3
 
-translate_keypad: psha
-	pshx	; preserve registers
-	leas -1,SP 		    ; byte chascii;
-	ldx #cnvTbl		    ; ptr = cnvTbl;
-	clra			    ; ix = 0;
-	movb #BADCODE,TR_CH,SP      ; ch = BADCODE;
+   	;-- Check if PORTA is KEY_4
+    cmpb 	#KEY_4
+    bne 	keyPress_found_key_4
 
-tLop: 			            ; do {
-	cmpb cnvTbl_code,X  	    ;     if(code == ptr->code)
-	bne tEndIf  	            ;     {
-	movb cnvTbl_ascii,X,TR_CH,SP ;        ch <- [ptr+1]
-	bra tEndLop  		    ;         break;
-tEndIf:  			    ;     }
-				    ;     else {	
-	leax cnvTbl_struct_len,X    ;           ptr++;
-	inca ; increment count      ;           ix++;
-                                    ;     }	
-	cmpa #NUMKEYS               ;} while count < NUMKEYS
-	blo tLop	
-tEndLop:                            
-	; restore registres
-	pulb 	
-	pulx
-	pula
-	rts
+   	;-- Check if PORTA is KEY_5
+  	cmpb 	#KEY_5
+    bne 	keyPress_found_key_5
 
+    ;-- Check if PORTA is KEY_6
+    cmpb 	#KEY_6
+    bne 	keyPress_found_key_6
 
+   	;-- Check if PORTA is KEY_7
+    cmpb 	#KEY_7
+    bne 	keyPress_found_key_7
 
+   	;-- Check if PORTA is KEY_8
+  	cmpb 	#KEY_8
+    bne 	keyPress_found_key_8
+
+    ;-- Check if PORTA is KEY_9
+    cmpb 	#KEY_9
+    bne 	keyPress_found_key_9
+
+   	;-- Check if PORTA is KEY_A
+    cmpb 	#KEY_A
+    bne 	keyPress_found_key_A
+
+   	;-- Check if PORTA is KEY_B
+  	cmpb 	#KEY_B
+    bne 	keyPress_found_key_B
+
+    ;-- Check if PORTA is KEY_C
+    cmpb 	#KEY_C
+    bne 	keyPress_found_key_C
+
+   	;-- Check if PORTA is KEY_D
+    cmpb 	#KEY_D
+    bne 	keyPress_found_key_D
+
+   	;-- Check if PORTA is KEY_ASTERISK
+  	cmpb 	#KEY_ASTERISK
+    bne 	keyPress_found_key_asterisk
+
+    ;-- Check if PORTA is KEY_HASHTAG
+  	cmpb 	#KEY_HASHTAG
+    bne 	keyPress_found_key_hashtag
+
+    ;-- All check failed for whatever reason, returns BADCODE
+    LDAB BADCODE
+    RTS
+
+keyPress_found_key_0:
+	LDAB #'0'
+	RTS
+keyPress_found_key_1:
+	LDAB #'1'
+	RTS
+keyPress_found_key_2:
+	LDAB #'2'
+	RTS
+keyPress_found_key_3:
+	LDAB #'3'
+	RTS
+keyPress_found_key_4:
+	LDAB #'4'
+	RTS
+keyPress_found_key_5:
+	LDAB #'5'
+	RTS
+keyPress_found_key_6:
+	LDAB #'6'
+	RTS
+keyPress_found_key_7:
+	LDAB #'7'
+	RTS
+keyPress_found_key_8:
+	LDAB #'8'
+	RTS
+keyPress_found_key_9:
+	LDAB #'9'
+	RTS
+keyPress_found_key_A:
+	LDAB #'a'
+	RTS
+keyPress_found_key_B:
+	LDAB #'b'
+	RTS
+keyPress_found_key_C:
+	LDAB #'c'
+	RTS
+keyPress_found_key_D:
+	LDAB #'d'
+	RTS 
+keyPress_found_key_hashtag:
+	LDAB #'#'
+	RTS
+keyPress_found_key_asterisk:
+	LDAB #'*'
+	RTS

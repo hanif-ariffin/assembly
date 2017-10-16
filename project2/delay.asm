@@ -7,8 +7,7 @@
 ;------------------------------------------------------
 
 ; Some definitions
-
-	SWITCH code_section
+    SWITCH code_section
 
 ;------------------------------------------------------
 ; Subroutine setDelay
@@ -18,11 +17,10 @@
 ; Description: Intialises the delayCount 
 ;              variable.
 ;------------------------------------------------------
-setDelay: 
-
-	;-- Complete this subroutine
-	STD       delayCount ;Put the value in D into globalVar::delayCount
-	rts
+;-- This subroutine does not use local variables so no stack is needed
+setDelay:
+	  STD       delayCount
+    rts
 
 
 ;------------------------------------------------------
@@ -44,25 +42,14 @@ setDelay:
 ;	Need 4 NOP
 ;   Run Loop 3000 times to create a 1 ms delay   
 ;------------------------------------------------------
-; Stack Usage:
-	OFFSET 0  ; to setup offset into stack
-PDLY_VARSIZE:
-PDLY_PR_Y   DS.W 1 ; preserve Y
-PDLY_PR_X   DS.W 1 ; preserve X
-PDLY_PR_B   DS.B 1 ; preserve B
-PDLY_RA     DS.W 1 ; return address
+;-- This subroutine does not use local variables so no stack is needed
 
-;------NOTE---------
-; polldelay begins by storing the values from b,x,y to the stack.
-; then perform a set of instructions that will take x seconds of processing time
-; then pull back the values of b,x,y from the stack.
-;-------------------
 polldelay: pshb
    	pshx
    	pshy
 
    	;-- Obtain the delayCount value set from setDelay and put it into register X
-   	LDX			delayCount
+    LDX			delayCount
    	LDAA 		#FALSE
    	LDY 		#3000
 
@@ -97,10 +84,11 @@ polldelay_end_loop:
 ; Global Variables: 
 ; Description: Set delay for num ms
 ;------------------------------------------------------
+;-- This subroutine does not use local variables so no stack is needed
 delayms:
-	;-- Initialize our delayCounter to be whatever value this function is given in D
-	JSR 		setDelay
-  	JSR 		polldelay
+	  ;-- Initialize our delayCounter to be whatever value this function is given in D
+	  JSR 		setDelay
+    JSR 		polldelay
   	
   	;-- Test if AC A is zero, if it is is, then skip BNE, if it is then BNE back and request a pollDelay again.
   	;-- AC A should content the boolean returned from pollDelay during this sequence.
