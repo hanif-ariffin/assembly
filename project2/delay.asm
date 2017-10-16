@@ -20,9 +20,9 @@
 ;------------------------------------------------------
 setDelay: 
 
-	; Complete this subroutine
-	STD delayCount ;Put the value in D into globalVar::delayCount
-	rts ;Branch back out
+	;-- Complete this subroutine
+	STD 	delayCount ;Put the value in D into globalVar::delayCount
+	rts
 
 
 ;------------------------------------------------------
@@ -58,34 +58,36 @@ PDLY_RA     DS.W 1 ; return address
 ; then pull back the values of b,x,y from the stack.
 ;-------------------
 polldelay: pshb
-   pshx
-   pshy
+   	pshx
+   	pshy
 
-   ; Complete this routine
-   ;Obtain the delayCount value set from setDelay and put it into register X
-   LDX delayCount
+   	;-- Obtain the delayCount value set from setDelay and put it into register X
+   	LDX			delayCount
+   	LDAA 		#FALSE
+   	LDY 		#3000
 
+polldelay_main:
+   	NOP
+   	NOP
+   	NOP
+   	NOP
 
-   LDAA #FALSE
-loop_delay_count:
-   ;-- XGDX ; Switch X <-> D, D will now contain the delayCount
-   LDY #3000
-loop_1_ms:
-   NOP
-   NOP
-   NOP
-   NOP
-   DEY ; Decrement #3000
-   BNE loop_1_ms ; Loop to loop_1_ms if not equal to zero
-   ;-- XGDX ;  Switch D <-> X, X will now contain the delayCount
-   DEX ; Decrement delayCount
-   BNE loop_delay_count ; Loop to loop_delay_count if not equal to zero
-   LDAA #TRUE;
-   ; restore registers and stack
-   puly
-   pulx
-   pulb
-   rts
+   	;-- A usual loop function, decrement #3000 by 1 and loop back to polldelay_main until its 0
+   	DEY
+   	BNE 		polldelay_main
+
+   	;-- Decrement delayCount (in X) and check if its zero. If its zero, that means that the loop finished counting. I
+   	;-- If its not, that means that while counting, something is interrupting the process (??)
+   	DEX
+   	BNE 		polldelay_end_loop
+   	LDAA 		#TRUE;
+
+polldelay_end_loop:
+   	;-- restore registers and stack
+   	puly
+   	pulx
+   	pulb
+   	rts
 
 
 ;------------------------------------------------------
@@ -95,13 +97,16 @@ loop_1_ms:
 ; Global Variables: 
 ; Description: Set delay for num ms
 ;------------------------------------------------------
-delayms: 
-   
-   ;-- XGDX    ; Switch D <-> X
-   bra polldelay  ; branch unconditionally to polldelay 
-   DEX   ; decrement X
-   bne delayms ; branch delayms if flag does not equal to zero
-   rts
+delayms:
+	;-- Initialize our delayCounter to be whatever value this function is given in D
+	JSR 		setDelay
+  	JSR 		polldelay
+  	
+  	;-- Test if AC A is zero, if it is is, then skip BNE, if it is then BNE back and request a pollDelay again.
+  	;-- AC A should content the boolean returned from pollDelay during this sequence.
+   	TSTA
+   	BNE 		delayms
+   	rts
 
 
 ;------------------------------------------------------
