@@ -185,7 +185,7 @@ readKey:psha
 readkey_main
 
 	;-- Set PORTA to the default value of $0F
-    MOVB 	$0F,			PORTA
+    MOVB 	$0F,				PORTA
 
 ;-- While PORTA == 0x0F, we will continue to loop indefinitely. This is probably not a good idea in general (?). 
 ;-- But won't necessarily cause any hickups, the user just have to press the keypad and it will exit this infinite loop.
@@ -202,7 +202,7 @@ readkey_obtain_value_from_PORTA:
     ;-- Since we have exited the readkey_obtain_value_from_PORTA loop, we are now under the assumption that something changed in PORTA, 
     ;-- we will now delay for 10ms before checking again to see if we have the same value as before. Before we
     ;-- do that, we store the value obtained from PORTA into the variable READKEY_CODE (which is in the stack).
-    MOVB 	PORTA,			READKEY_CODE,	SP
+    MOVB 	PORTA,				READKEY_CODE,	SP
     LDD 	#10
     JSR 	delayms
 
@@ -211,14 +211,14 @@ readkey_obtain_value_from_PORTA:
     ;-- be something weird that caused the input to change during the 10ms delay and let the user try again. Even better, if the user's hand is slow enough, 
     ;-- this is just reducing the probability that the hardware messes up.
     LDAB 	PORTA
-    CMPB 	READKEY_CODE,	SP
+    CMPB 	READKEY_CODE,		SP
     BNE 	readkey_main
 
     ;-- Since we have confirmed that the value in PORTA is indeed consistent for some time, we can guarantee that this is indeed a keypress. 
     ;-- Call the keypress subsroutine to parse the value in PORTA. The subsroutine keyPress will store the return value in B, we then put this 
     ;-- value in the variable for this subsroutine.
     JSR 	keyPress
-    STAB 	READKEY_CODE,	SP
+    STAB 	READKEY_CODE,		SP
 
 ;-- To ensure that the processing of the keypad press is only evaluated AFTER the user have released the key, we perform an infinite loop 
 ;-- that will only be broken when the value in PORTA is equal to the default value that is set in the beginning of that infinite loop. To ensure that the user have indeed released the key,
@@ -227,7 +227,7 @@ readkey_obtain_value_from_PORTA:
 ;-- ________________ISSUES___________________:
 ;-- If the value in PORTA is being continuously updated indefinitely, the program will get stuck here and there is no recovering from this error.
 readkey_check_release_key:
-    MOVB 	#$0F,			PORTA
+    MOVB 	#$0F,				PORTA
 
     ;-- Call delayms subroutine to delay for 10ms
     LDD 	#10
@@ -240,11 +240,11 @@ readkey_check_release_key:
     BNE 	readkey_check_release_key
 
     ;-- Load the value that we obtained from keyPress and put it into AC B to be translated by the translate_keypad subroutine.
-    LDAB 	READKEY_CODE,SP
+    LDAB 	READKEY_CODE,		SP
     JSR 	translate_keypad
 
     ;-- Recover the stack memory that this subroutine uses.
-    LEAS 	READKEY_VARSIZE,SP
+    LEAS 	READKEY_VARSIZE,	SP
     PULA
     RTS
 
@@ -259,27 +259,35 @@ readkey_check_release_key:
 ;-----------------------------------------------------------	
 ; Stack Usage: none
 
-keyPress: 
-         movb #ROW1,PORTA  ; PORTA = ROW1;
-kpIf1  ldab PORTA          ; if(PORTA == ROW1) // input pin is 0 if key in row 1
-         cmpb #ROW1
-         bne kpEndIf1      ; {
-         movb #ROW2,PORTA  ;   PORTA = ROW2
-kpIf2  ldab PORTA          ;   if(PORTA == ROW2)
-         cmpb #ROW2
-         bne kpEndIf2      ;   {
-         movb #ROW3,PORTA  ;      PORTA = ROW3;
-kpIf3  ldab PORTA          ;      if(PORTA == ROW3)
-         cmpb #ROW3        ;        {
-         bne kpEndIf3      ;          PORTA = ROW4;
-         movb #ROW4,PORTA  ;        }
-kpEndIf1 		   ;   }
-kpEndIf2 
-kpEndIf3                                                    
-                           ; }
-         ldab PORTA        ; key = PORTA;
-         rts               ; return(key);
-	      
+;-- keyPress is just a bunch of if's statement that will check each the given value obtained with the rows
+keyPress:
+	
+	;-- Check if PORTA is ROW1
+	;-- If true jump straight to keyPress_found
+	movb 	#ROW1,	PORTA
+	ldab 	PORTA
+    cmpb 	#ROW1
+    bne 	keyPress_found
+
+   	;-- Check if PORTA is ROW2.
+   	;-- If true jump straight to keyPress_found
+    movb 	#ROW2,	PORTA
+	ldab 	PORTA
+    cmpb 	#ROW2
+    bne 	keyPress_found
+
+   	;-- Check if PORTA is ROW3
+   	;-- If true jump straight to keyPress_found
+    movb 	#ROW3,	PORTA
+	ldab 	PORTA
+  	cmpb 	#ROW3
+    bne 	keyPress_found
+
+    ;-- Else it has to be ROW4
+   	movb 	#ROW4,	PORTA
+keyPress_found:
+    LDAB 	PORTA
+    RTS	      
 ;-----------------------------------------------------------	
 ; Subroutine:  ch <- translate_keypad(code)
 ; Arguments
