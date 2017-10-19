@@ -143,16 +143,16 @@ pollReadkey_decrement_POLLCOUNT:
 	RTS ;-- return from pollReadKey
 
 ;-----------------------------------------------------------	
-; Subroutine: ch <- readKey
+; Subroutine: readKey
 ; Arguments: none
 ; Local variable: 
-;	ch - ASCII Code in accumulator B
+;	ASCII value in AC B
 
 ; Description:
-;  Main subroutine that reads a code from the
-;  keyboard using the subroutine readKeybrd.  The
-;  code is then translated with the subroutine
-;  translate to get the corresponding ASCII code.
+;-- After pollReadKey have guaranteed that the change in voltage was not an anomaly, we now 
+;-- further guarantee that the input given is consistent for some period of time before we are fully 
+;-- confident the change is exactly an input by the user. The translation from PORTA --> ASCII is done
+;-- by the translate_to_ASCII subroutine
 ;-----------------------------------------------------------	
 ; Stack Usage
 	OFFSET 0  ; to setup offset into stack
@@ -186,30 +186,39 @@ readkey_obtain_value_from_PORTA:
     CMPB 	#$0F
     BEQ 	readkey_obtain_value_from_PORTA
 
-    ;-- Since we have exited the readkey_obtain_value_from_PORTA loop, we are now under the assumption that something changed in PORTA, 
+    ;-- Since we have exited the readkey_obtain_value_from_PORTA loop, 
+    ;-- we are now under the assumption that something changed in PORTA, 
     ;-- we will now delay for 10ms before checking again to see if we have the same value as before. Before we
     ;-- do that, we store the value obtained from PORTA into the variable READKEY_CODE (which is in the stack).
     MOVB 	PORTA,				READKEY_CODE,	SP
     LDD 	#10
     JSR 	delayms
 
-    ;-- Get and compare the new content PORTA after the 10ms delay. If the resulting substraction (which is how CMPB works) is not equal to zero (hence we are using BNE)
-    ;-- then the program will loop back to readkey_main and perform the same check as before again. We go back to readkey_main because there could 
-    ;-- be something weird that caused the input to change during the 10ms delay and let the user try again. Even better, if the user's hand is slow enough, 
+    ;-- Get and compare the new content PORTA after the 10ms delay. If the resulting 
+    ;-- substraction (which is how CMPB works) is not equal to zero (hence we are using BNE)
+    ;-- then the program will loop back to readkey_main and perform the same check as 
+    ;-- before again. We go back to readkey_main because there could 
+    ;-- be something weird that caused the input to change during the 10ms delay and let the 
+    ;-- user try again. Even better, if the user's hand is slow enough, 
     ;-- this is just reducing the probability that the hardware messes up.
     LDAB 	PORTA
     CMPB 	READKEY_CODE,		SP
     BNE 	readkey_main
 
-    ;-- Since we have confirmed that the value in PORTA is indeed consistent for some time, we can guarantee that this is indeed a keypress. 
-    ;-- Call the keypress subsroutine to parse the value in PORTA. The subsroutine keyPress will store the return value in B, we then put this 
+    ;-- Since we have confirmed that the value in PORTA is indeed consistent for 
+    ;-- some time, we can guarantee that this is indeed a keypress. 
+    ;-- Call the translate_to_ASCII subsroutine to parse the value in PORTA. That 
+    ;-- will store the return value in B, we then put this 
     ;-- value in the variable for this subsroutine.
-    JSR 	keyPress
+    JSR 	translate_to_ASCII
     STAB 	READKEY_CODE,		SP
 
-;-- To ensure that the processing of the keypad press is only evaluated AFTER the user have released the key, we perform an infinite loop 
-;-- that will only be broken when the value in PORTA is equal to the default value that is set in the beginning of that infinite loop. To ensure that the user have indeed released the key,
-;-- we will introduce a delay of 10ms (the debouncing time) into the infinite loop. This will likely cause a slow program, but its better than having a buggy program.
+;-- To ensure that the processing of the keypad press is only evaluated AFTER the 
+;-- user have released the key, we perform an infinite loop 
+;-- that will only be broken when the value in PORTA is equal to the default value that 
+;-- is set in the beginning of that infinite loop. To ensure that the user have indeed released the key,
+;-- we will introduce a delay of 10ms (the debouncing time) into the infinite loop. This will likely 
+;-- cause a slow program, but its better than having a buggy program.
 ;--
 ;-- ________________ISSUES___________________:
 ;-- If the value in PORTA is being continuously updated indefinitely, the program will get stuck here and there is no recovering from this error.
@@ -226,7 +235,7 @@ readkey_check_release_key:
     CMPB 	#$0F
     BNE 	readkey_check_release_key
 
-    ;-- Load the value that we obtained from keyPress and put it into AC B to be translated by the translate_keypad subroutine.
+    ;-- Load the value that we obtained from translate_to_ASCII and put it into AC B to be translated by the translate_keypad subroutine.
     LDAB 	READKEY_CODE,		SP
 
     ;-- Recover the stack memory that this subroutine uses.
@@ -235,132 +244,131 @@ readkey_check_release_key:
     RTS
 
 ;-----------------------------------------------------------	
-; Subroutine: key <- keyPress       
-; Arguments: none
-; Local variables:  key: Accumulator B
-; Returns: key - in Accumulator B - code corresponding to key pressed
+; Subroutine: translate_to_ASCII       
+; Arguments: No argument
+; Returns:
+    The value in AC B
 
-; Description: Assume key is pressed. Set 0 on each output pin
-;              to find row and hence code for the key.
+; Description: Depending on the key pressed, it will return the corresponding ASCII value
 ;-----------------------------------------------------------	
 ;-- This subroutine does not use local variables so no stack is needed
 
-;-- keyPress is just a bunch of if's statement that will check each the given value obtained with the rows.
-keyPress:
+;-- translate_to_ASCII is just a bunch of if's statement that will check each the given value obtained with the rows.
+translate_to_ASCII:
 	
 	;-- Check if PORTA is KEY_0
     cmpb 	#KEY_0
-    bne 	keyPress_found_key_0
+    bne 	translate_to_ASCII_found_key_0
 
    	;-- Check if PORTA is KEY_1
     cmpb 	#KEY_1
-    bne 	keyPress_found_key_1
+    bne 	translate_to_ASCII_found_key_1
 
    	;-- Check if PORTA is KEY_2
   	cmpb 	#KEY_2
-    bne 	keyPress_found_key_2
+    bne 	translate_to_ASCII_found_key_2
 
     ;-- Check if PORTA is KEY_3
     cmpb 	#KEY_3
-    bne 	keyPress_found_key_3
+    bne 	translate_to_ASCII_found_key_3
 
    	;-- Check if PORTA is KEY_4
     cmpb 	#KEY_4
-    bne 	keyPress_found_key_4
+    bne 	translate_to_ASCII_found_key_4
 
    	;-- Check if PORTA is KEY_5
   	cmpb 	#KEY_5
-    bne 	keyPress_found_key_5
+    bne 	translate_to_ASCII_found_key_5
 
     ;-- Check if PORTA is KEY_6
     cmpb 	#KEY_6
-    bne 	keyPress_found_key_6
+    bne 	translate_to_ASCII_found_key_6
 
    	;-- Check if PORTA is KEY_7
     cmpb 	#KEY_7
-    bne 	keyPress_found_key_7
+    bne 	translate_to_ASCII_found_key_7
 
    	;-- Check if PORTA is KEY_8
   	cmpb 	#KEY_8
-    bne 	keyPress_found_key_8
+    bne 	translate_to_ASCII_found_key_8
 
     ;-- Check if PORTA is KEY_9
     cmpb 	#KEY_9
-    bne 	keyPress_found_key_9
+    bne 	translate_to_ASCII_found_key_9
 
    	;-- Check if PORTA is KEY_A
     cmpb 	#KEY_A
-    bne 	keyPress_found_key_A
+    bne 	translate_to_ASCII_found_key_A
 
    	;-- Check if PORTA is KEY_B
   	cmpb 	#KEY_B
-    bne 	keyPress_found_key_B
+    bne 	translate_to_ASCII_found_key_B
 
     ;-- Check if PORTA is KEY_C
     cmpb 	#KEY_C
-    bne 	keyPress_found_key_C
+    bne 	translate_to_ASCII_found_key_C
 
    	;-- Check if PORTA is KEY_D
     cmpb 	#KEY_D
-    bne 	keyPress_found_key_D
+    bne 	translate_to_ASCII_found_key_D
 
    	;-- Check if PORTA is KEY_ASTERISK
   	cmpb 	#KEY_ASTERISK
-    bne 	keyPress_found_key_asterisk
+    bne 	translate_to_ASCII_found_key_asterisk
 
     ;-- Check if PORTA is KEY_HASHTAG
   	cmpb 	#KEY_HASHTAG
-    bne 	keyPress_found_key_hashtag
+    bne 	translate_to_ASCII_found_key_hashtag
 
     ;-- All check failed for whatever reason, returns BADCODE
     LDAB BADCODE
     RTS
 
-keyPress_found_key_0:
+translate_to_ASCII_found_key_0:
 	LDAB #'0'
 	RTS
-keyPress_found_key_1:
+translate_to_ASCII_found_key_1:
 	LDAB #'1'
 	RTS
-keyPress_found_key_2:
+translate_to_ASCII_found_key_2:
 	LDAB #'2'
 	RTS
-keyPress_found_key_3:
+translate_to_ASCII_found_key_3:
 	LDAB #'3'
 	RTS
-keyPress_found_key_4:
+translate_to_ASCII_found_key_4:
 	LDAB #'4'
 	RTS
-keyPress_found_key_5:
+translate_to_ASCII_found_key_5:
 	LDAB #'5'
 	RTS
-keyPress_found_key_6:
+translate_to_ASCII_found_key_6:
 	LDAB #'6'
 	RTS
-keyPress_found_key_7:
+translate_to_ASCII_found_key_7:
 	LDAB #'7'
 	RTS
-keyPress_found_key_8:
+translate_to_ASCII_found_key_8:
 	LDAB #'8'
 	RTS
-keyPress_found_key_9:
+translate_to_ASCII_found_key_9:
 	LDAB #'9'
 	RTS
-keyPress_found_key_A:
+translate_to_ASCII_found_key_A:
 	LDAB #'a'
 	RTS
-keyPress_found_key_B:
+translate_to_ASCII_found_key_B:
 	LDAB #'b'
 	RTS
-keyPress_found_key_C:
+translate_to_ASCII_found_key_C:
 	LDAB #'c'
 	RTS
-keyPress_found_key_D:
+translate_to_ASCII_found_key_D:
 	LDAB #'d'
 	RTS 
-keyPress_found_key_hashtag:
+translate_to_ASCII_found_key_hashtag:
 	LDAB #'#'
 	RTS
-keyPress_found_key_asterisk:
+translate_to_ASCII_found_key_asterisk:
 	LDAB #'*'
 	RTS
