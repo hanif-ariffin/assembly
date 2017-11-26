@@ -1,6 +1,6 @@
 /*------------------------------------------------
  * File: switches.h
- * Description: Include file with definitions for 
+ * Description: Include file with definitions for
  *              the Switches Module.
 --------------------------------------------------*/
 

@@ -11,13 +11,13 @@
 #include "string.h"
 
 /*--------------Global Data Structures--------------------------*/
-// The following data structures need not be located in RAM - They are 
+// The following data structures need not be located in RAM - They are
 // readonly
 
 // Alarm codes - needs to be placed in EEPROM
 #pragma DATA_SEG EEPROM_DATA
 int alarmCodes[NUMCODES] = { 0x0000, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF };
-#pragma DATA_SEG DEFAULT 
+#pragma DATA_SEG DEFAULT
 
 // Although these are defines, the strings must be stored somewhere
 // in memory.  This means that the symbolic constants (such as WELCOME)
@@ -36,21 +36,21 @@ void main()
 {
    byte select;
    PLL_init();
-   // Initialisation 
-   initCodes();  
+   // Initialisation
+   initCodes();
    initKeyPad();
    initSwitches();
    initLCD();
    initDisp();
    asm cli;
    // main loop
-   for(;;)  // loop forever
+   for (;;) // loop forever
    {
-      printLCDStr(MENU1,0);
-      printLCDStr(MENU2,1);
+      printLCDStr(MENU1, 0);
+      printLCDStr(MENU2, 1);
       select = readKey();
-      if(select == 'c') configCodes();
-      else if(select == 'a') enableAlarm();
+      if (select == 'c') configCodes();
+      else if (select == 'a') enableAlarm();
       else /* do nothing */;
    }
 }

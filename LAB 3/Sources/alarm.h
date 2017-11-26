@@ -1,6 +1,6 @@
 /*------------------------------------------------
  * File: alarm.h
- * Description: Include file with definitions for 
+ * Description: Include file with definitions for
  *              the Alarm System Simulation project
 --------------------------------------------------*/
 
@@ -11,7 +11,7 @@
 
 
 /*************************Some Definitions**********************/
-// for calculating wins - The following should be translated to 
+// for calculating wins - The following should be translated to
 // Assembler EQU directives
 #define NOCHAR 0xff
 #define BEL 0x07

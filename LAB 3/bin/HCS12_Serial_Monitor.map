@@ -1,5 +1,5 @@
 *** EVALUATION ***
-PROGRAM "D:\Dropbox Files\Dropbox\FALL 2017\CEG 3136\LAB\LAB 3\Lab3\bin\HCS12_Serial_Monitor.abs"
+PROGRAM "C:\Users\r3xas\Documents\Git\assembly\LAB 3\bin\HCS12_Serial_Monitor.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -13,18 +13,19 @@ Linker      : SmartLinker V-5.0.52 Build 15249, Sep  7 2015
 FILE SECTION
 ---------------------------------------------------------------------------------------------
 mc9s12dg256.c.o                         Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
-main.asm.o                              Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
 Start12.c.o                             Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 CTYPE.C.o (ansis.lib)                   Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
+rtshc12.c.o (ansis.lib)                 Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 alarm.c.o                               Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 armed.c.o                               Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 config.c.o                              Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 lcd.asm.o                               Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
+lcdDisp.c.o                             Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
+main.asm.o                              Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
 SegDisp.c.o                             Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
 switches.c.o                            Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
-lcdDisp.c.o                             Model: SMALL,         Lang: ANSI-C,        Compiler Version: ANSI-C/cC++ Compiler for HC12 V-5.0.46 Build 15249, Sep  7 2015
-keyPad.asm.o                            Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
 delay.asm.o                             Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
+keyPad.asm.o                            Model: SMALL,         Lang: Assembler,     Compiler Version: Assembler for HC12 V-5.0.32 Build 15249, Sep  7 2015
 
 *********************************************************************************************
 STARTUP SECTION
@@ -34,7 +35,7 @@ _startupData is allocated at 0xC03B and uses 6 Bytes
 extern struct _tagStartup {
   unsigned nofZeroOut     1
   _Range   pZeroOut       0x1100     10
-  _Copy    *toCopyDownBeg 0xC737
+  _Copy    *toCopyDownBeg 0xC7A3
 } _startupData;
 
 *********************************************************************************************
@@ -45,8 +46,8 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        10     R     0xC03B     0xC044   ROM_C000
 .rodata                           45     R     0xC045     0xC071   ROM_C000
 .rodata1                         150     R     0xC072     0xC107   ROM_C000
-.text                           1555     R     0xC108     0xC71A   ROM_C000
-.copy                              8     R     0xC737     0xC73E   ROM_C000
+.text                           1643     R     0xC108     0xC772   ROM_C000
+.copy                              8     R     0xC7A3     0xC7AA   ROM_C000
 .stack                           256   R/W     0x1000     0x10FF   RAM
 .data                              4   R/W     0x1100     0x1103   RAM
 EEPROM_DATA                       10   N/I      0x400      0x409   EEPROM
@@ -391,13 +392,13 @@ EEPROM_DATA                       10   N/I      0x400      0x409   EEPROM
 .abs_section_17e                   2   N/I      0x17E      0x17F   .absSeg338
 .abs_section_2ae                   2   N/I      0x2AE      0x2AF   .absSeg339
 .abs_section_2be                   2   N/I      0x2BE      0x2BF   .absSeg340
-.bss                               2   R/W     0x1104     0x1105   RAM
-MyCode                            28     R     0xC71B     0xC736   ROM_C000
-.common                            4   R/W     0x1106     0x1109   RAM
+.bss                               6   R/W     0x1104     0x1109   RAM
+RUNTIME                           20     R     0xC773     0xC786   ROM_C000
+MyCode                            28     R     0xC787     0xC7A2   ROM_C000
 .vectSeg341_vect                   2     R     0xFFFE     0xFFFF   .vectSeg341
 
 Summary of section sizes per section type:
-READ_ONLY (R):         741 (dec:     1857)
+READ_ONLY (R):         7AD (dec:     1965)
 READ_WRITE (R/W):      10A (dec:      266)
 NO_INIT (N/I):         19A (dec:      410)
 
@@ -615,7 +616,7 @@ MODULE:                 -- mc9s12dg256.c.o --
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       0   .abs_section_258
+     _PTP                                       258       1       1       4   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
      _DDRP                                      25A       1       1       1   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
@@ -696,7 +697,7 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN4TXDSR7                                2BB       1       1       0   .abs_section_2bb
      _CAN4TXDLR                                 2BC       1       1       0   .abs_section_2bc
      _CAN4TXTBPR                                2BD       1       1       0   .abs_section_2bd
-     _PORTAB                                      0       2       2       2   .abs_section_0
+     _PORTAB                                      0       2       2       5   .abs_section_0
      _DDRAB                                       2       2       2       1   .abs_section_2
      _PARTID                                     1A       2       2       0   .abs_section_1a
      _TCNT                                       44       2       2       0   .abs_section_44
@@ -755,12 +756,6 @@ MODULE:                 -- mc9s12dg256.c.o --
      _CAN0TXTSR                                 17E       2       2       0   .abs_section_17e
      _CAN4RXTSR                                 2AE       2       2       0   .abs_section_2ae
      _CAN4TXTSR                                 2BE       2       2       0   .abs_section_2be
-MODULE:                 -- main.asm.o --
-- PROCEDURES:
-     asm_main                                  C71B      12      18       0   MyCode      
-     PLL_init                                  C71B       0       0       1   MyCode      
-     pll1                                      C72D       A      10       0   MyCode      
-- VARIABLES:
 MODULE:                 -- Start12.c.o --
 - PROCEDURES:
      Init                                      C000      29      41       1   .init       
@@ -773,6 +768,10 @@ MODULE:                 -- CTYPE.C.o (ansis.lib) --
 - PROCEDURES:
      isdigit                                   C108       E      14       6   .text       
 - VARIABLES:
+MODULE:                 -- rtshc12.c.o (ansis.lib) --
+- PROCEDURES:
+     _CASE_CHECKED_BYTE                        C773      14      20       1   RUNTIME     
+- VARIABLES:
 MODULE:                 -- alarm.c.o --
 - PROCEDURES:
      main                                      C116      41      65       1   .text       
@@ -782,11 +781,11 @@ MODULE:                 -- alarm.c.o --
      alarmCodes                                 400       A      10       4   EEPROM_DATA 
 MODULE:                 -- armed.c.o --
 - PROCEDURES:
-     enableAlarm                               C157      9A     154       2   .text       
-     systemArmed                               C1F1      CB     203       6   .text       
-     checkCode                                 C2BC      43      67       5   .text       
-     isCodeValid                               C2FF      28      40       1   .text       
-     triggerAlarm                              C327      5B      91       2   .text       
+     enableAlarm                               C157      9D     157       2   .text       
+     systemArmed                               C1F4      CB     203       6   .text       
+     checkCode                                 C2BF      43      67       5   .text       
+     isCodeValid                               C302      28      40       1   .text       
+     triggerAlarm                              C32A      5B      91       2   .text       
 - VARIABLES:
      STRING.Code..1                            C092       6       6       1   .rodata1    
      STRING.....Arming.....2                   C098       F      15       1   .rodata1    
@@ -796,11 +795,11 @@ MODULE:                 -- armed.c.o --
      alarmCode.6                               1104       2       2       4   .bss        
 MODULE:                 -- config.c.o --
 - PROCEDURES:
-     configCodes                               C382      43      67       1   .text       
-     enterMstCode                              C3C5      56      86       1   .text       
-     setcode                                   C41B      80     128       1   .text       
-     initCodes                                 C49B       F      15       1   .text       
-     writeToEE                                 C4AA      3D      61       2   .text       
+     configCodes                               C385      43      67       1   .text       
+     enterMstCode                              C3C8      56      86       1   .text       
+     setcode                                   C41E      80     128       1   .text       
+     initCodes                                 C49E       F      15       1   .text       
+     writeToEE                                 C4AD      3D      61       2   .text       
 - VARIABLES:
      STRING.a.mstr.1.4.other.1                 C0C5      11      17       1   .rodata1    
      STRING.Bad.entry.2                        C0D6       A      10       2   .rodata1    
@@ -809,20 +808,20 @@ MODULE:                 -- config.c.o --
      STRING.Cannot.disable.5                   C0F9       F      15       1   .rodata1    
 MODULE:                 -- lcd.asm.o --
 - PROCEDURES:
-     lcd_init                                  C4E7       A      10       1   .text       
-     lcdi1                                     C4F1      1E      30       0   .text       
-     data8                                     C50F       C      12       0   .text       
-     set_lcd_addr                              C51B       E      14       1   .text       
-     clear_lcd                                 C529       C      12       0   .text       
-     type_lcd                                  C535       3       3       1   .text       
-     next_char                                 C538       F      15       0   .text       
-     done                                      C547       2       2       0   .text       
-     write_instr_nibble                        C549       B      11       3   .text       
-     win                                       C554       8       8       0   .text       
-     write_data_nibble                         C55C       B      11       2   .text       
-     wdn                                       C567       8       8       0   .text       
-     write_instr_byte                          C56F       D      13       3   .text       
-     write_data_byte                           C57C       D      13       2   .text       
+     lcd_init                                  C4EA       A      10       1   .text       
+     lcdi1                                     C4F4      1E      30       0   .text       
+     data8                                     C512       C      12       0   .text       
+     set_lcd_addr                              C51E       E      14       1   .text       
+     clear_lcd                                 C52C       C      12       1   .text       
+     type_lcd                                  C538       3       3       1   .text       
+     next_char                                 C53B       F      15       0   .text       
+     done                                      C54A       2       2       0   .text       
+     write_instr_nibble                        C54C       B      11       3   .text       
+     win                                       C557       8       8       0   .text       
+     write_data_nibble                         C55F       B      11       2   .text       
+     wdn                                       C56A       8       8       0   .text       
+     write_instr_byte                          C572       D      13       3   .text       
+     write_data_byte                           C57F       D      13       2   .text       
 - VARIABLES:
      VAR00001                                  C045       1       1       1   .rodata     
      VAR00002                                  C046       1       1       0   .rodata     
@@ -837,47 +836,60 @@ MODULE:                 -- lcd.asm.o --
      VAR00011                                  C04F       1       1       0   .rodata     
      VAR00012                                  C050       1       1       0   .rodata     
      VAR00013                                  C051       1       1       0   .rodata     
-MODULE:                 -- SegDisp.c.o --
-- PROCEDURES:
-     initDisp                                  C589       D      13       1   .text       
-     clearDisp                                 C596      1E      30       5   .text       
-     setCharDisplay                            C5B4      27      39      11   .text       
-     segDisp                                   C5DB      23      35       7   .text       
-- VARIABLES:
-     PB00                                      1106       1       1       2   .common     
-     PB01                                      1107       1       1       2   .common     
-     PB02                                      1108       1       1       2   .common     
-     PB03                                      1109       1       1       2   .common     
-MODULE:                 -- switches.c.o --
-- PROCEDURES:
-     initSwitches                              C5FE       C      12       1   .text       
-     getSwStatus                               C60A       4       4       2   .text       
-- VARIABLES:
 MODULE:                 -- lcdDisp.c.o --
 - PROCEDURES:
-     initLCD                                   C60E       3       3       1   .text       
-     printLCDStr                               C611      15      21       8   .text       
+     initLCD                                   C58C       3       3       1   .text       
+     printLCDStr                               C58F      15      21       8   .text       
 - VARIABLES:
+MODULE:                 -- main.asm.o --
+- PROCEDURES:
+     asm_main                                  C787      12      18       0   MyCode      
+     PLL_init                                  C787       0       0       1   MyCode      
+     pll1                                      C799       A      10       0   MyCode      
+- VARIABLES:
+MODULE:                 -- SegDisp.c.o --
+- PROCEDURES:
+     initDisp                                  C5A4       B      11       1   .text       
+     clearDisp                                 C5AF      16      22       5   .text       
+     setCharDisplay                            C5C5      63      99       7   .text       
+     segDisp                                   C628      46      70       6   .text       
+- VARIABLES:
+     char_array                                1106       4       4       7   .bss        
+MODULE:                 -- switches.c.o --
+- PROCEDURES:
+     initSwitches                              C66E       C      12       1   .text       
+     getSwStatus                               C67A       4       4       2   .text       
+- VARIABLES:
+MODULE:                 -- delay.asm.o --
+- PROCEDURES:
+     setDelay                                  C67E       4       4       1   .text       
+     pollDelay                                 C682       B      11       1   .text       
+     delay1ms                                  C68D       C      12       0   .text       
+     pdly_endif1                               C699       7       7       0   .text       
+     delayMs                                   C6A0       5       5      12   .text       
+     delms_while                               C6A5       9       9       0   .text       
+- VARIABLES:
+     delayCount                                1102       2       2       3   .data       
 MODULE:                 -- keyPad.asm.o --
 - PROCEDURES:
-     initKeyPad                                C626       B      11       1   .text       
-     pollReadKey                               C631       F      15       3   .text       
-     prkLop                                    C640      19      25       0   .text       
-     prkEndIf1                                 C659       3       3       0   .text       
-     prkEndIf2                                 C659       0       0       0   .text       
-     prkEndLop                                 C65C       6       6       0   .text       
-     readKey                                   C662       3       3       6   .text       
-     rkDo                                      C665       6       6       0   .text       
-     rkLop1                                    C66B      21      33       0   .text       
-     rkLop2                                    C68C      15      21       0   .text       
-     keyPress                                  C6A1      26      38       1   .text       
-     kpEndIf1                                  C6C7       3       3       0   .text       
-     kpEndIf2                                  C6C7       0       0       0   .text       
-     kpEndIf3                                  C6C7       0       0       0   .text       
-     translate                                 C6CA       C      12       1   .text       
-     tLop                                      C6D6       A      10       0   .text       
-     tEndIf                                    C6E0       7       7       0   .text       
-     tEndLop                                   C6E7       4       4       0   .text       
+     initKeyPad                                C6AE       B      11       1   .text       
+     pollReadKey                               C6B9       F      15       3   .text       
+     prkLop                                    C6C8      19      25       0   .text       
+     prkEndIf1                                 C6E1       3       3       0   .text       
+     prkEndIf2                                 C6E1       0       0       0   .text       
+     prkEndLop                                 C6E4       6       6       0   .text       
+     readKey                                   C6EA       3       3       6   .text       
+     rkDo                                      C6ED       6       6       0   .text       
+     rkLop1                                    C6F3      21      33       0   .text       
+     rkLop2                                    C714      15      21       0   .text       
+     keyPress                                  C729      26      38       1   .text       
+     kpEndIf1                                  C74F       3       3       0   .text       
+     kpEndIf2                                  C74F       0       0       0   .text       
+     kpEndIf3                                  C74F       0       0       0   .text       
+     translate                                 C752       C      12       1   .text       
+     tLop                                      C75E       A      10       0   .text       
+     tEndIf                                    C768       7       7       0   .text       
+     tEndLop                                   C76F       4       4       0   .text       
 - VARIABLES:
      cnvTbl                                    C052       2       2       1   .rodata     
      VAR00001                                  C054       2       2       0   .rodata     
@@ -895,34 +907,25 @@ MODULE:                 -- keyPad.asm.o --
      VAR00013                                  C06C       2       2       0   .rodata     
      VAR00014                                  C06E       2       2       0   .rodata     
      VAR00015                                  C070       2       2       0   .rodata     
-MODULE:                 -- delay.asm.o --
-- PROCEDURES:
-     setDelay                                  C6EB       4       4       1   .text       
-     pollDelay                                 C6EF       B      11       1   .text       
-     delay1ms                                  C6FA       C      12       0   .text       
-     pdly_endif1                               C706       7       7       0   .text       
-     delayMs                                   C70D       5       5      11   .text       
-     delms_while                               C712       9       9       0   .text       
-- VARIABLES:
-     delayCount                                1102       2       2       3   .data       
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12dg256.c.o                            400      0      0
-  main.asm.o                                   0     28      0
   Start12.c.o                                  0     59      0
   CTYPE.C.o (ansis.lib)                        0     14      0
+  rtshc12.c.o (ansis.lib)                      0     20      0
   alarm.c.o                                   10     65     32
-  armed.c.o                                    4    555     51
+  armed.c.o                                    4    558     51
   config.c.o                                   0    357     67
   lcd.asm.o                                    0    162     13
-  SegDisp.c.o                                  4    117      0
-  switches.c.o                                 0     16      0
   lcdDisp.c.o                                  0     24      0
-  keyPad.asm.o                                 0    197     32
+  main.asm.o                                   0     28      0
+  SegDisp.c.o                                  4    202      0
+  switches.c.o                                 0     16      0
   delay.asm.o                                  2     48      0
+  keyPad.asm.o                                 0    197     32
   other                                      256     12      8
 
 *********************************************************************************************
@@ -932,15 +935,15 @@ SECTION: ".text"
   isdigit main enableAlarm systemArmed checkCode isCodeValid triggerAlarm 
   configCodes enterMstCode setcode initCodes writeToEE lcd_init lcdi1 data8 
   set_lcd_addr clear_lcd type_lcd next_char done write_instr_nibble win 
-  write_data_nibble wdn write_instr_byte write_data_byte initDisp clearDisp 
-  setCharDisplay segDisp initSwitches getSwStatus initLCD printLCDStr 
-  initKeyPad pollReadKey prkLop prkEndIf2 prkEndIf1 prkEndLop readKey rkDo 
-  rkLop1 rkLop2 keyPress kpEndIf3 kpEndIf2 kpEndIf1 translate tLop tEndIf 
-  tEndLop setDelay pollDelay delay1ms pdly_endif1 delayMs delms_while 
+  write_data_nibble wdn write_instr_byte write_data_byte initLCD printLCDStr 
+  initDisp clearDisp setCharDisplay segDisp initSwitches getSwStatus setDelay 
+  pollDelay delay1ms pdly_endif1 delayMs delms_while initKeyPad pollReadKey 
+  prkLop prkEndIf2 prkEndIf1 prkEndLop readKey rkDo rkLop1 rkLop2 keyPress 
+  kpEndIf3 kpEndIf2 kpEndIf1 translate tLop tEndIf tEndLop 
 SECTION: ".data"
   mult.5 delayCount 
 SECTION: ".bss"
-  alarmCode.6 
+  alarmCode.6 char_array 
 SECTION: ".init"
   Init _Startup 
 SECTION: ".rodata"
@@ -1637,16 +1640,16 @@ SECTION: ".abs_section_2ae"
   _CAN4RXTSR 
 SECTION: ".abs_section_2be"
   _CAN4TXTSR 
+SECTION: "RUNTIME"
+  _CASE_CHECKED_BYTE 
 SECTION: "MyCode"
   PLL_init asm_main pll1 
-SECTION: ".common"
-  PB00 PB01 PB02 PB03 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     _PORTAB                                      0       2       2       2   .abs_section_0
+     _PORTAB                                      0       2       2       5   .abs_section_0
      _DDRAB                                       2       2       2       1   .abs_section_2
      _PORTE                                       8       1       1       0   .abs_section_8
      _DDRE                                        9       1       1       0   .abs_section_9
@@ -1904,7 +1907,7 @@ OBJECT LIST SORTED BY ADDRESS
      _PPSM                                      255       1       1       0   .abs_section_255
      _WOMM                                      256       1       1       0   .abs_section_256
      _MODRR                                     257       1       1       0   .abs_section_257
-     _PTP                                       258       1       1       0   .abs_section_258
+     _PTP                                       258       1       1       4   .abs_section_258
      _PTIP                                      259       1       1       0   .abs_section_259
      _DDRP                                      25A       1       1       1   .abs_section_25a
      _RDRP                                      25B       1       1       0   .abs_section_25b
@@ -1991,10 +1994,7 @@ OBJECT LIST SORTED BY ADDRESS
      mult.5                                    1100       2       2       4   .data       
      delayCount                                1102       2       2       3   .data       
      alarmCode.6                               1104       2       2       4   .bss        
-     PB00                                      1106       1       1       2   .common     
-     PB01                                      1107       1       1       2   .common     
-     PB02                                      1108       1       1       2   .common     
-     PB03                                      1109       1       1       2   .common     
+     char_array                                1106       4       4       7   .bss        
      Init                                      C000      29      41       1   .init       
      _Startup                                  C029      12      18       0   .init       
      VAR00001                                  C045       1       1       1   .rodata     
@@ -2039,65 +2039,66 @@ OBJECT LIST SORTED BY ADDRESS
      STRING.Cannot.disable.5                   C0F9       F      15       1   .rodata1    
      isdigit                                   C108       E      14       6   .text       
      main                                      C116      41      65       1   .text       
-     enableAlarm                               C157      9A     154       2   .text       
-     systemArmed                               C1F1      CB     203       6   .text       
-     checkCode                                 C2BC      43      67       5   .text       
-     isCodeValid                               C2FF      28      40       1   .text       
-     triggerAlarm                              C327      5B      91       2   .text       
-     configCodes                               C382      43      67       1   .text       
-     enterMstCode                              C3C5      56      86       1   .text       
-     setcode                                   C41B      80     128       1   .text       
-     initCodes                                 C49B       F      15       1   .text       
-     writeToEE                                 C4AA      3D      61       2   .text       
-     lcd_init                                  C4E7       A      10       1   .text       
-     lcdi1                                     C4F1      1E      30       0   .text       
-     data8                                     C50F       C      12       0   .text       
-     set_lcd_addr                              C51B       E      14       1   .text       
-     clear_lcd                                 C529       C      12       0   .text       
-     type_lcd                                  C535       3       3       1   .text       
-     next_char                                 C538       F      15       0   .text       
-     done                                      C547       2       2       0   .text       
-     write_instr_nibble                        C549       B      11       3   .text       
-     win                                       C554       8       8       0   .text       
-     write_data_nibble                         C55C       B      11       2   .text       
-     wdn                                       C567       8       8       0   .text       
-     write_instr_byte                          C56F       D      13       3   .text       
-     write_data_byte                           C57C       D      13       2   .text       
-     initDisp                                  C589       D      13       1   .text       
-     clearDisp                                 C596      1E      30       5   .text       
-     setCharDisplay                            C5B4      27      39      11   .text       
-     segDisp                                   C5DB      23      35       7   .text       
-     initSwitches                              C5FE       C      12       1   .text       
-     getSwStatus                               C60A       4       4       2   .text       
-     initLCD                                   C60E       3       3       1   .text       
-     printLCDStr                               C611      15      21       8   .text       
-     initKeyPad                                C626       B      11       1   .text       
-     pollReadKey                               C631       F      15       3   .text       
-     prkLop                                    C640      19      25       0   .text       
-     prkEndIf2                                 C659       0       0       0   .text       
-     prkEndIf1                                 C659       3       3       0   .text       
-     prkEndLop                                 C65C       6       6       0   .text       
-     readKey                                   C662       3       3       6   .text       
-     rkDo                                      C665       6       6       0   .text       
-     rkLop1                                    C66B      21      33       0   .text       
-     rkLop2                                    C68C      15      21       0   .text       
-     keyPress                                  C6A1      26      38       1   .text       
-     kpEndIf3                                  C6C7       0       0       0   .text       
-     kpEndIf2                                  C6C7       0       0       0   .text       
-     kpEndIf1                                  C6C7       3       3       0   .text       
-     translate                                 C6CA       C      12       1   .text       
-     tLop                                      C6D6       A      10       0   .text       
-     tEndIf                                    C6E0       7       7       0   .text       
-     tEndLop                                   C6E7       4       4       0   .text       
-     setDelay                                  C6EB       4       4       1   .text       
-     pollDelay                                 C6EF       B      11       1   .text       
-     delay1ms                                  C6FA       C      12       0   .text       
-     pdly_endif1                               C706       7       7       0   .text       
-     delayMs                                   C70D       5       5      11   .text       
-     delms_while                               C712       9       9       0   .text       
-     PLL_init                                  C71B       0       0       1   MyCode      
-     asm_main                                  C71B      12      18       0   MyCode      
-     pll1                                      C72D       A      10       0   MyCode      
+     enableAlarm                               C157      9D     157       2   .text       
+     systemArmed                               C1F4      CB     203       6   .text       
+     checkCode                                 C2BF      43      67       5   .text       
+     isCodeValid                               C302      28      40       1   .text       
+     triggerAlarm                              C32A      5B      91       2   .text       
+     configCodes                               C385      43      67       1   .text       
+     enterMstCode                              C3C8      56      86       1   .text       
+     setcode                                   C41E      80     128       1   .text       
+     initCodes                                 C49E       F      15       1   .text       
+     writeToEE                                 C4AD      3D      61       2   .text       
+     lcd_init                                  C4EA       A      10       1   .text       
+     lcdi1                                     C4F4      1E      30       0   .text       
+     data8                                     C512       C      12       0   .text       
+     set_lcd_addr                              C51E       E      14       1   .text       
+     clear_lcd                                 C52C       C      12       1   .text       
+     type_lcd                                  C538       3       3       1   .text       
+     next_char                                 C53B       F      15       0   .text       
+     done                                      C54A       2       2       0   .text       
+     write_instr_nibble                        C54C       B      11       3   .text       
+     win                                       C557       8       8       0   .text       
+     write_data_nibble                         C55F       B      11       2   .text       
+     wdn                                       C56A       8       8       0   .text       
+     write_instr_byte                          C572       D      13       3   .text       
+     write_data_byte                           C57F       D      13       2   .text       
+     initLCD                                   C58C       3       3       1   .text       
+     printLCDStr                               C58F      15      21       8   .text       
+     initDisp                                  C5A4       B      11       1   .text       
+     clearDisp                                 C5AF      16      22       5   .text       
+     setCharDisplay                            C5C5      63      99       7   .text       
+     segDisp                                   C628      46      70       6   .text       
+     initSwitches                              C66E       C      12       1   .text       
+     getSwStatus                               C67A       4       4       2   .text       
+     setDelay                                  C67E       4       4       1   .text       
+     pollDelay                                 C682       B      11       1   .text       
+     delay1ms                                  C68D       C      12       0   .text       
+     pdly_endif1                               C699       7       7       0   .text       
+     delayMs                                   C6A0       5       5      12   .text       
+     delms_while                               C6A5       9       9       0   .text       
+     initKeyPad                                C6AE       B      11       1   .text       
+     pollReadKey                               C6B9       F      15       3   .text       
+     prkLop                                    C6C8      19      25       0   .text       
+     prkEndIf2                                 C6E1       0       0       0   .text       
+     prkEndIf1                                 C6E1       3       3       0   .text       
+     prkEndLop                                 C6E4       6       6       0   .text       
+     readKey                                   C6EA       3       3       6   .text       
+     rkDo                                      C6ED       6       6       0   .text       
+     rkLop1                                    C6F3      21      33       0   .text       
+     rkLop2                                    C714      15      21       0   .text       
+     keyPress                                  C729      26      38       1   .text       
+     kpEndIf3                                  C74F       0       0       0   .text       
+     kpEndIf2                                  C74F       0       0       0   .text       
+     kpEndIf1                                  C74F       3       3       0   .text       
+     translate                                 C752       C      12       1   .text       
+     tLop                                      C75E       A      10       0   .text       
+     tEndIf                                    C768       7       7       0   .text       
+     tEndLop                                   C76F       4       4       0   .text       
+     _CASE_CHECKED_BYTE                        C773      14      20       1   RUNTIME     
+     PLL_init                                  C787       0       0       1   MyCode      
+     asm_main                                  C787      12      18       0   MyCode      
+     pll1                                      C799       A      10       0   MyCode      
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -2106,20 +2107,29 @@ NOT USED PROCEDURES
 CTYPE.C.o (ansis.lib):
   isalnum isalpha iscntrl isgraph islower isprint ispunct isspace isupper 
   isxdigit tolower toupper 
+rtshc12.c.o (ansis.lib):
+  _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRU 
+  _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP _LCMP_P _LCMP_PP _LNEG _LCOM _LINC 
+  _LDEC _LMUL _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU 
+  _LMODS _ILSEXT _COPY _CASE_DIRECT _CASE_DIRECT_BYTE _CASE_CHECKED 
+  _CASE_SEARCH _CASE_SEARCH_BYTE _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE _FCALL 
+  _FPCMP 
 NOT USED VARIABLES
 CTYPE.C.o (ansis.lib):
   _ctype 
+rtshc12.c.o (ansis.lib):
+  _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
 
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0xC737 ---- SIZE       4 ---
+------- ROM-ADDRESS: 0xC7A3 ---- SIZE       4 ---
 Filling bytes inserted
  00021100
-------- ROM-ADDRESS: 0xC73B ---- RAM-ADDRESS: 0x1100 ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC7A7 ---- RAM-ADDRESS: 0x1100 ---- SIZE       2 ---
 Name of initialized Object : mult.5
  03E8
-------- ROM-ADDRESS: 0xC73D ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC7A9 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -2131,9 +2141,9 @@ _Startup                  USES __SEG_END_SSTACK Init main
 main                      USES PLL_init initCodes initKeyPad initSwitches 
                                 initLCD initDisp STRING.CEG.Alarm.System.1 printLCDStr 
                                 STRING.c.Config.a.Arm.2 readKey configCodes enableAlarm 
-enableAlarm               USES STRING.Code..1 enableAlarm readKey checkCode 
-                                STRING.....Arming.....2 setCharDisplay segDisp pollReadKey isdigit 
-                                clearDisp systemArmed printLCDStr 
+enableAlarm               USES clear_lcd STRING.Code..1 enableAlarm readKey 
+                                checkCode STRING.....Arming.....2 setCharDisplay segDisp 
+                                pollReadKey isdigit clearDisp systemArmed printLCDStr 
 systemArmed               USES STRING.....Armed.....3 systemArmed checkCode 
                                 getSwStatus STRING....Disarming....4 setCharDisplay 
                                 segDisp clearDisp triggerAlarm printLCDStr pollReadKey 
@@ -2159,23 +2169,23 @@ clear_lcd                 USES write_instr_byte delayMs
 next_char                 USES write_data_byte delayMs 
 write_instr_byte          USES write_instr_nibble 
 write_data_byte           USES write_data_nibble 
-initDisp                  USES _DDRAB _DDRP clearDisp segDisp 
-clearDisp                 USES setCharDisplay 
-setCharDisplay            USES PB00 PB01 PB02 PB03 
-segDisp                   USES PB00 _PORTAB delayMs PB01 PB02 PB03 
-initSwitches              USES _DDRH _PERH _PPSH 
-getSwStatus               USES _PTH 
 initLCD                   USES lcd_init 
 printLCDStr               USES set_lcd_addr type_lcd 
-prkLop                    USES delayMs readKey 
-rkLop1                    USES delayMs keyPress 
-rkLop2                    USES delayMs translate 
-translate                 USES cnvTbl 
+initDisp                  USES _DDRAB _DDRP clearDisp 
+clearDisp                 USES _PORTAB _PTP char_array 
+setCharDisplay            USES _CASE_CHECKED_BYTE char_array 
+segDisp                   USES char_array _PORTAB _PTP delayMs 
+initSwitches              USES _DDRH _PERH _PPSH 
+getSwStatus               USES _PTH 
 setDelay                  USES delayCount 
 pollDelay                 USES delayCount 
 pdly_endif1               USES delayCount 
 delayMs                   USES setDelay 
 delms_while               USES pollDelay 
+prkLop                    USES delayMs readKey 
+rkLop1                    USES delayMs keyPress 
+rkLop2                    USES delayMs translate 
+translate                 USES cnvTbl 
 
 *********************************************************************************************
 DEPENDENCY TREE
@@ -2201,15 +2211,7 @@ DEPENDENCY TREE
  |  +- initDisp            
  |  |  | 
  |  |  +- clearDisp           
- |  |  |  | 
- |  |  |  +- setCharDisplay      
- |  |  |       
- |  |  +- segDisp             
- |  |     | 
- |  |     +- delayMs             
- |  |        | 
- |  |        +- setDelay            
- |  |             
+ |  |       
  |  +- printLCDStr         
  |  |  | 
  |  |  +- set_lcd_addr        
@@ -2218,8 +2220,10 @@ DEPENDENCY TREE
  |  |  |  |  | 
  |  |  |  |  +- write_instr_nibble  
  |  |  |  |       
- |  |  |  +- delayMs              (see above)
- |  |  |     
+ |  |  |  +- delayMs             
+ |  |  |     | 
+ |  |  |     +- setDelay            
+ |  |  |          
  |  |  +- type_lcd            
  |  |       
  |  +- readKey             
@@ -2250,6 +2254,12 @@ DEPENDENCY TREE
  |  |        
  |  +- enableAlarm         
  |     | 
+ |     +- clear_lcd           
+ |     |  | 
+ |     |  +- write_instr_byte     (see above)
+ |     |  |  
+ |     |  +- delayMs              (see above)
+ |     |     
  |     +- readKey              (see above)
  |     |  
  |     +- checkCode           
@@ -2258,10 +2268,14 @@ DEPENDENCY TREE
  |     |  |  
  |     |  +- isCodeValid         
  |     |       
- |     +- setCharDisplay       (see above)
- |     |  
- |     +- segDisp              (see above)
- |     |  
+ |     +- setCharDisplay      
+ |     |  | 
+ |     |  +- _CASE_CHECKED_BYTE  
+ |     |       
+ |     +- segDisp             
+ |     |  | 
+ |     |  +- delayMs              (see above)
+ |     |     
  |     +- pollReadKey         
  |     |    
  |     +- isdigit              (see above)
@@ -2315,5 +2329,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 7
-Total size of all blocks to be downloaded: 1857
+Total size of all blocks to be downloaded: 1965
 

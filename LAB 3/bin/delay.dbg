@@ -64,8 +64,8 @@ pollDelay: pshb
 
    ; Complete this routine
 
-   ldaa FALSE       ; byte retval = FALSE;
-   ldx 3000         ; short cntr = 3000;
+   ldaa #FALSE       ; byte retval = FALSE;
+   ldx #3000         ; short cntr = 3000;
    ldy delayCount    ; short delay = delayCount;
 delay1ms             ; do
                      ; {
@@ -78,7 +78,7 @@ delay1ms             ; do
 after1ms:            ;
    dey		     ; delay--;
    bne pdly_endif1   ; if(delayCount == 0) {
-   ldaa TRUE        ;   retval = TRUE;
+   ldaa #TRUE        ;   retval = TRUE;
 pdly_endif1:         ; }
                      ; return(retval);
    sty delayCount    ; delayCount = delay;
@@ -116,7 +116,7 @@ delms_while:
    pula
    puld
    rts
-
+   
 ;------------------------------------------------------
 ; Global variables
 ;------------------------------------------------------
